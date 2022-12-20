@@ -1,7 +1,5 @@
-import {State} from "./state.js";
-import {Transition} from "./transition.js";
 
-export let FA = class {
+let FA = class {
     static startState = null;
     static states = [];
     static transitions = [];

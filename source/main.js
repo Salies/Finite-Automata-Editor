@@ -1,5 +1,4 @@
-import {FA} from "./fa.js";
-import {FAScene} from "./fa-scene.js";
+
 
 let cWidth = document.getElementById("controlBar").clientWidth;
 let cHeight = document.getElementById("canvasDiv").clientHeight;

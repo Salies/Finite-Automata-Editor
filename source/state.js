@@ -1,4 +1,4 @@
-export let State = class {
+let State = class {
     constructor(x, y, radius, accept, label) {
         this.x = x;
         this.y = y;

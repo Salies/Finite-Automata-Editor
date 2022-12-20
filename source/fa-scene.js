@@ -1,12 +1,9 @@
-import {FA} from "./fa.js";
-import {State} from "./state.js";
-import {Transition} from "./transition.js";
 
 /*
 This class handles drawing elements to the canvas and
 user input on the canvas.
 */
-export let FAScene = class {
+let FAScene = class {
     constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");

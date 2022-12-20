@@ -1,4 +1,4 @@
-export let Transition = class {
+let Transition = class {
     constructor(fromState, toState, symbols, x = null, y = null) {
         this.fromState = fromState;
         this.toState = toState;
