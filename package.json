@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  },
+  "name": "finite-automata-editor",
+  "description": "Web application for creating and testing finite automata.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Salies/Finite-Automata-Editor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Salies/Finite-Automata-Editor/issues"
+  },
+  "homepage": "https://github.com/Salies/Finite-Automata-Editor#readme"
+}
