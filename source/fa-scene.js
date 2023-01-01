@@ -65,6 +65,8 @@ let FAScene = class {
         this.transitionMenu = document.createElement("div");
         this.transitionMenu.appendChild(deleteTransitionOption);
 
+        // PAREI AQUI
+
         //The Add State menu is used for state creation
 
         let addStateTitle = document.createElement("div");
