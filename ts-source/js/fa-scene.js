@@ -327,21 +327,19 @@ let FAScene = class {
     //Clears the canvas and draws all components of the FA.
     redraw = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        for (let s of FA.states) {
-            s.draw(this.ctx);
-        }
-        for (let t of FA.transitions) {
-            t.draw(this.ctx);
-        }
-        if (this.selectionBoxX != null) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(this.selectionBoxX, this.selectionBoxY);
-            this.ctx.lineTo(this.selectionBoxX, this.lastY);
-            this.ctx.lineTo(this.lastX, this.lastY);
-            this.ctx.lineTo(this.lastX, this.selectionBoxY);
-            this.ctx.lineTo(this.selectionBoxX, this.selectionBoxY);
-            this.ctx.stroke();
-        }
+        // Junta os estados e as transições do autômato, a serem desenhados, em uma lista
+        const elements = FA.states.concat(FA.transitions);
+        elements.forEach(e => e.draw(this.ctx));
+
+        if (this.selectionBoxX == null) return;
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.selectionBoxX, this.selectionBoxY);
+        this.ctx.lineTo(this.selectionBoxX, this.lastY);
+        this.ctx.lineTo(this.lastX, this.lastY);
+        this.ctx.lineTo(this.lastX, this.selectionBoxY);
+        this.ctx.lineTo(this.selectionBoxX, this.selectionBoxY);
+        this.ctx.stroke();
     }
 
     mouseUpHandle = (e) => {
