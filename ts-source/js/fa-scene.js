@@ -18,148 +18,34 @@ let FAScene = class {
         this.menuContainer = document.createElement("div");
         this.menuContainer.classList.add("menu-wrapper");
 
-        //The default menu is used when right clicking on a blank spot on the canvas.
-        //It contains only the "Add State" option.
+        const menuOptionsNames = ['Adicionar estado', 'Remover estado', 'Adicionar transição', 'Remover transição', 'Final', 'Definir como inicial'];
+        let menuOptions = {};
+        menuOptionsNames.forEach((optionName) => {
+            menuOptions[optionName] = document.createElement('div');
+            menuOptions[optionName].innerText = optionName;
+            menuOptions[optionName].classList.add('menuItem');
+        });
 
-        let addStateOption = document.createElement("div");
-        addStateOption.className = "menuItem";
-        addStateOption.innerHTML = "Add State";
+        // Construindo o menu para clique em um lugar vazio da tela.
+        this.defaultMenu = document.createElement('div');
+        this.defaultMenu.appendChild(menuOptions['Adicionar estado']);
 
-        this.defaultMenu = document.createElement("div");
-        this.defaultMenu.appendChild(addStateOption);
+        // Construindo o menu para clique em um estado.
+        this.stateMenu = document.createElement('div');
+        this.stateMenu.appendChild(menuOptions['Remover estado']);
+        this.stateMenu.appendChild(menuOptions['Adicionar transição']);
+        this.stateMenu.appendChild(menuOptions['Final']);
+        this.stateMenu.appendChild(menuOptions['Definir como inicial']);
 
-        //The state menu is used when right clicking on a state.
-        //It has options to add a transition, change this state's acceptance,
-        //set this as the start state, and delete this state.
+        // Construindo o menu para clique em uma transição.
+        this.transitionMenu = document.createElement('div');
+        this.transitionMenu.appendChild(menuOptions['Remover transição']);
 
-        let addTransitionOption = document.createElement("div");
-        addTransitionOption.className = "menuItem";
-        addTransitionOption.innerHTML = "Add Transition";
+        this.addStateMenu = document.createElement('div');
+        const { stateCreateButton, stateCancelButton } = this.createStateCreationUI();
 
-        let changeAcceptOption = document.createElement("div");
-        changeAcceptOption.className = "menuItem";
-        changeAcceptOption.innerHTML = "Change Acceptance";
-
-        let setStartOption = document.createElement("div");
-        setStartOption.className = "menuItem";
-        setStartOption.innerHTML = "Make Start State";
-
-        let deleteStateOption = document.createElement("div");
-        deleteStateOption.className = "menuItem";
-        deleteStateOption.innerHTML = "Delete State";
-
-
-        this.stateMenu = document.createElement("div");
-        this.stateMenu.appendChild(addTransitionOption);
-        this.stateMenu.appendChild(changeAcceptOption);
-        this.stateMenu.appendChild(setStartOption);
-        this.stateMenu.appendChild(deleteStateOption);
-
-        //The transition menu is used when right clicking on a transition.
-        //It has options to delete this transition.
-
-        let deleteTransitionOption = document.createElement("div");
-        deleteTransitionOption.className = "menuItem";
-        deleteTransitionOption.innerHTML = "Delete Transition";
-
-        this.transitionMenu = document.createElement("div");
-        this.transitionMenu.appendChild(deleteTransitionOption);
-
-        // PAREI AQUI
-
-        //The Add State menu is used for state creation
-
-        let addStateTitle = document.createElement("div");
-        addStateTitle.innerHTML = "Add State";
-
-        let stateLabelDiv = document.createElement("div");
-        let stateLabelText = document.createElement("label");
-        stateLabelText.innerHTML = "Label: ";
-        let stateLabelInput = document.createElement("input");
-        stateLabelInput.id = "stateLabelInput";
-        stateLabelInput.maxLength = "1";
-        stateLabelInput.style.width = "1rem";
-        stateLabelDiv.appendChild(stateLabelText);
-        stateLabelDiv.appendChild(stateLabelInput);
-
-        let stateAcceptDiv = document.createElement("div");
-        let stateAcceptText = document.createElement("label");
-        stateAcceptText.innerHTML = "Accept";
-        let stateAcceptInput = document.createElement("input");
-        stateAcceptInput.type = "checkbox";
-        stateAcceptInput.id = "stateAcceptInput";
-        stateAcceptDiv.appendChild(stateAcceptText);
-        stateAcceptDiv.appendChild(stateAcceptInput);
-
-        let stateStartDiv = document.createElement("div");
-        let stateStartText = document.createElement("label");
-        stateStartText.innerHTML = "Start";
-        let stateStartInput = document.createElement("input");
-        stateStartInput.type = "checkbox";
-        stateStartInput.id = "stateStartInput";
-        stateStartDiv.appendChild(stateStartText);
-        stateStartDiv.appendChild(stateStartInput);
-
-        let stateButtonDiv = document.createElement("div");
-        let stateCreateButton = document.createElement("button");
-        stateCreateButton.innerHTML = "Create";
-        stateCreateButton.id = "stateCreateButton";
-        let stateCancelButton = document.createElement("button");
-        stateCancelButton.innerHTML = "Cancel";
-        stateCancelButton.id = "stateCancelButton";
-        stateButtonDiv.appendChild(stateCreateButton);
-        stateButtonDiv.appendChild(stateCancelButton);
-
-        this.addStateMenu = document.createElement("div");
-        this.addStateMenu.className = "menuItem";
-        this.addStateMenu.appendChild(addStateTitle);
-        this.addStateMenu.appendChild(stateLabelDiv);
-        //this.addStateMenu.appendChild(stateAcceptDiv);
-        //this.addStateMenu.appendChild(stateStartDiv);
-        this.addStateMenu.appendChild(stateButtonDiv);
-
-        // Parei aqui
-
-        //The Add Transition menu is used for transition creation
-
-        let addTransitionTitle = document.createElement("div");
-        addTransitionTitle.innerHTML = "Add Transition";
-
-        let targetLabelDiv = document.createElement("div");
-        let targetLabelText = document.createElement("label");
-        targetLabelText.innerHTML = "To State: ";
-        let targetInput = document.createElement("input");
-        targetInput.maxLength = "1";
-        targetInput.style.width = "1rem";
-        targetInput.id = "targetInput";
-        targetLabelDiv.appendChild(targetLabelText);
-        targetLabelDiv.appendChild(targetInput);
-
-        let symbolDiv = document.createElement("div");
-        let symbolText = document.createElement("label");
-        symbolText.innerHTML = "Symbol(s): ";
-        let symbolInput = document.createElement("input");
-        symbolInput.style.width = "1rem";
-        symbolInput.id = "symbolInput";
-        symbolDiv.appendChild(symbolText);
-        symbolDiv.appendChild(symbolInput);
-
-        let transitionButtonDiv = document.createElement("div");
-        let transitionCreateButton = document.createElement("button");
-        transitionCreateButton.innerHTML = "Create";
-        transitionCreateButton.id = "transitionCreateButton";
-        let transitionCancelButton = document.createElement("button");
-        transitionCancelButton.innerHTML = "Cancel";
-        transitionCancelButton.id = "transitionCancelButton";
-        transitionButtonDiv.appendChild(transitionCreateButton);
-        transitionButtonDiv.appendChild(transitionCancelButton);
-
-        this.addTransitionMenu = document.createElement("div");
-        this.addTransitionMenu.className = "menuItem";
-        this.addTransitionMenu.appendChild(addTransitionTitle);
-        this.addTransitionMenu.appendChild(targetLabelDiv);
-        this.addTransitionMenu.appendChild(symbolDiv);
-        this.addTransitionMenu.appendChild(transitionButtonDiv);
+        this.addTransitionMenu = document.createElement('div');
+        const { transitionCreateButton, transitionCancelButton } = this.createTransitionCreationUI();
 
         //Bind functions
         this.drawAll = this.drawAll.bind(this);
@@ -186,20 +72,128 @@ let FAScene = class {
         this.canvas.addEventListener("mousemove", this.mouseMoveHandle);
         this.canvas.addEventListener("mousedown", this.mouseDownHandle);
         this.canvas.addEventListener("mouseup", this.mouseUpHandle);
-        this.canvas.addEventListener("contextmenu",this.openMenu);
-        document.getElementsByTagName("html")[0].addEventListener("keydown", this.ctrlDown);
-        document.getElementsByTagName("html")[0].addEventListener("keyup", this.ctrlUp);
+        this.canvas.addEventListener("contextmenu", this.openMenu);
+        
+        const docHtml = document.getElementsByTagName("html")[0];
 
-        addStateOption.addEventListener("click", this.openAddStateMenu);
+        docHtml.addEventListener("keydown", this.ctrlDown);
+        docHtml.addEventListener("keyup", this.ctrlUp);
+
+        menuOptions['Adicionar estado'].addEventListener("click", this.openAddStateMenu);
         stateCreateButton.addEventListener("click", this.createState);
         stateCancelButton.addEventListener("click", this.cancelStateCreate);
-        changeAcceptOption.addEventListener("click",this.changeAccept);
-        setStartOption.addEventListener("click", this.makeStart);
-        addTransitionOption.addEventListener("click", this.openAddTransitionMenu);
+        menuOptions['Final'].addEventListener("click", this.changeAccept);
+        menuOptions['Definir como inicial'].addEventListener("click", this.makeStart);
+        menuOptions['Adicionar transição'].addEventListener("click", this.openAddTransitionMenu);
         transitionCreateButton.addEventListener("click", this.createTransition);
         transitionCancelButton.addEventListener("click", this.cancelTransitionCreate);
-        deleteStateOption.addEventListener("click", this.deleteState);
-        deleteTransitionOption.addEventListener("click", this.deleteTransition);
+        menuOptions['Remover estado'].addEventListener("click", this.deleteState);
+        menuOptions['Remover transição'].addEventListener("click", this.deleteTransition);
+    }
+
+    // Cria a interface de criação de estados.
+    createStateCreationUI() {
+        // Marcação de estado final
+        const finalDiv = document.createElement('div');
+        const finalLabel = document.createElement('label');
+        finalLabel.innerText = 'Final';
+        const finalInput = document.createElement('input');
+        finalInput.id = 'stateAcceptInput';
+        finalInput.type = 'checkbox';
+        finalDiv.appendChild(finalInput);
+        finalDiv.appendChild(finalLabel);
+
+        // Marcação de estado inicial
+        const initialDiv = document.createElement('div');
+        const initialLabel = document.createElement('label');
+        initialLabel.innerText = 'Inicial';
+        const initialInput = document.createElement('input');
+        initialInput.id = 'stateStartInput';
+        initialInput.type = 'checkbox';
+        initialDiv.appendChild(initialInput);
+        initialDiv.appendChild(initialLabel);
+
+        // Nome do estado
+        const nameDiv = document.createElement('div');
+        const nameLabel = document.createElement('label');
+        nameLabel.innerText = 'Nome do estado:';
+        const nameInput = document.createElement('input');
+        nameInput.id = 'stateLabelInput';
+        nameInput.type = 'text';
+        nameDiv.appendChild(nameLabel);
+        nameDiv.appendChild(nameInput);
+
+        // Botão de criação
+        const createButton = document.createElement('button');
+        createButton.innerText = 'Criar';
+        createButton.id = 'stateCreateButton';
+
+        // Botão de cancelamento
+        const cancelButton = document.createElement('button');
+        cancelButton.innerText = 'Cancelar';
+        cancelButton.id = 'stateCancelButton';
+
+        // Div para os botões
+        const buttonDiv = document.createElement('div');
+        buttonDiv.appendChild(createButton);
+        buttonDiv.appendChild(cancelButton);
+
+        // Montando a interface
+        this.addStateMenu.classList.add('menuItem');
+        this.addStateMenu.appendChild(nameDiv);
+        this.addStateMenu.appendChild(finalDiv);
+        this.addStateMenu.appendChild(initialDiv);
+        this.addStateMenu.appendChild(buttonDiv);
+
+        return { stateCreateButton: createButton, stateCancelButton: cancelButton }
+    }
+
+    // Cria a interface de criação de transições.
+    createTransitionCreationUI() {
+        // Para qual estado?
+        const toStateDiv = document.createElement('div');
+        const toStateLabel = document.createElement('label');
+        toStateLabel.innerText = 'Para:';
+        const toStateInput = document.createElement('input');
+        toStateInput.id = 'targetInput';
+        toStateInput.type = 'text';
+        toStateDiv.appendChild(toStateLabel);
+        toStateDiv.appendChild(toStateInput);
+
+        // Qual símbolo?
+        const symbolDiv = document.createElement('div');
+        const symbolLabel = document.createElement('label');
+        symbolLabel.innerText = 'Símbolo:';
+        const symbolInput = document.createElement('input');
+        symbolInput.id = 'symbolInput';
+        symbolInput.type = 'text';
+        symbolDiv.appendChild(symbolLabel);
+        symbolDiv.appendChild(symbolInput);
+
+        // Div dos botões
+        const buttonDiv = document.createElement('div');
+
+        // Botão de criação
+        const createButton = document.createElement('button');
+        createButton.innerText = 'Criar';
+        createButton.id = 'transitionCreateButton';
+
+        // Botão de cancelamento
+        const cancelButton = document.createElement('button');
+        cancelButton.innerText = 'Cancelar';
+        cancelButton.id = 'transitionCancelButton';
+
+        // Adicionando os botões à div
+        buttonDiv.appendChild(createButton);
+        buttonDiv.appendChild(cancelButton);
+
+        // Montando a interface
+        this.addTransitionMenu.classList.add('menuItem');
+        this.addTransitionMenu.appendChild(toStateDiv);
+        this.addTransitionMenu.appendChild(symbolDiv);
+        this.addTransitionMenu.appendChild(buttonDiv);
+
+        return { transitionCreateButton: createButton, transitionCancelButton: cancelButton }
     }
 
     //Checks where the right mouse button was clicked,
@@ -207,16 +201,16 @@ let FAScene = class {
     openMenu(e) {
         e.preventDefault();
         this.menuContainer.x = e.offsetX;
-        this.menuContainer.y = e.   offsetY;
-        this.menuContainer.selected = this.checkForElement(e.offsetX,e.offsetY);
+        this.menuContainer.y = e.offsetY;
+        this.menuContainer.selected = this.checkForElement(e.offsetX, e.offsetY);
 
-        if(this.menuContainer.selected == null) {
+        if (this.menuContainer.selected == null) {
             this.menuContainer.appendChild(this.defaultMenu);
         }
-        else if(this.menuContainer.selected instanceof State) {
+        else if (this.menuContainer.selected instanceof State) {
             this.menuContainer.appendChild(this.stateMenu);
         }
-        else if(this.menuContainer.selected instanceof Transition) {
+        else if (this.menuContainer.selected instanceof Transition) {
             this.menuContainer.appendChild(this.transitionMenu);
         }
 
@@ -228,7 +222,7 @@ let FAScene = class {
     }
 
     closeMenu() {
-        if(this.menuContainer.parentNode) {
+        if (this.menuContainer.parentNode) {
             this.menuContainer.parentNode.removeChild(this.menuContainer);
             this.menuContainer.removeChild(this.menuContainer.firstChild);
         }
@@ -249,14 +243,14 @@ let FAScene = class {
         let start = false;
         //document.getElementById("stateStartInput").checked = false;
         let s = FA.findState(label);
-        if(label == "") {
+        if (label == "") {
             alert("Error: The state label cannot be blank.")
         }
-        else if(s != null) {
+        else if (s != null) {
             alert("Error: A state already exists with label " + label + ".");
         }
         else {
-            FA.addState(this.menuContainer.x,this.menuContainer.y,start,accept,label);
+            FA.addState(this.menuContainer.x, this.menuContainer.y, start, accept, label);
         }
         this.drawAll();
         this.closeMenu();
@@ -302,14 +296,14 @@ let FAScene = class {
         let toState = FA.findState(toStateLabel);
         let symbols = document.getElementById("symbolInput").value;
         document.getElementById("symbolInput").value = "";
-        if(toStateLabel == "") {
+        if (toStateLabel == "") {
             alert("Error: The state label cannot be blank.");
         }
-        else if(symbols == "") {
+        else if (symbols == "") {
             alert("Error: There must be at least one symbol.");
         }
-        else if(toState == null) {
-            alert("Error: There is no state with label " + toStateLabel +".");
+        else if (toState == null) {
+            alert("Error: There is no state with label " + toStateLabel + ".");
         }
         else {
             FA.addTransition(this.menuContainer.selected, toState, symbols);
@@ -334,44 +328,44 @@ let FAScene = class {
 
     //Clears the canvas and draws all components of the FA.
     drawAll() {
-        this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-        for(let s of FA.states) {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (let s of FA.states) {
             s.draw(this.ctx);
         }
-        for(let t of FA.transitions) {
+        for (let t of FA.transitions) {
             t.draw(this.ctx);
         }
-        if(this.selectionBoxX != null) {
+        if (this.selectionBoxX != null) {
             this.ctx.beginPath();
-            this.ctx.moveTo(this.selectionBoxX,this.selectionBoxY);
-            this.ctx.lineTo(this.selectionBoxX,this.lastY);
-            this.ctx.lineTo(this.lastX,this.lastY);
-            this.ctx.lineTo(this.lastX,this.selectionBoxY);
-            this.ctx.lineTo(this.selectionBoxX,this.selectionBoxY);
+            this.ctx.moveTo(this.selectionBoxX, this.selectionBoxY);
+            this.ctx.lineTo(this.selectionBoxX, this.lastY);
+            this.ctx.lineTo(this.lastX, this.lastY);
+            this.ctx.lineTo(this.lastX, this.selectionBoxY);
+            this.ctx.lineTo(this.selectionBoxX, this.selectionBoxY);
             this.ctx.stroke();
         }
     }
 
     mouseUpHandle(e) {
-        if(this.selectionBoxX != null) {
-            this.checkForElements(this.selectionBoxX,this.selectionBoxY,this.lastX,this.lastY);
+        if (this.selectionBoxX != null) {
+            this.checkForElements(this.selectionBoxX, this.selectionBoxY, this.lastX, this.lastY);
             this.selectionBoxX = null;
             this.selectionBoxY = null;
         }
-        else if(!this.ctrlPressed) {
+        else if (!this.ctrlPressed) {
             this.selected.length = 0;
         }
         this.mousePressed = false;
     }
 
     mouseMoveHandle(e) {
-        this.deltaX = e.offsetX-this.lastX;
-        this.deltaY = e.offsetY-this.lastY;
+        this.deltaX = e.offsetX - this.lastX;
+        this.deltaY = e.offsetY - this.lastY;
         this.lastX = e.offsetX;
         this.lastY = e.offsetY;
-        if(this.mousePressed) {
-            for(let element of this.selected) {
-                element.move(element.x + (this.deltaX),element.y + (this.deltaY));
+        if (this.mousePressed) {
+            for (let element of this.selected) {
+                element.move(element.x + (this.deltaX), element.y + (this.deltaY));
             }
             this.drawAll();
         }
@@ -379,13 +373,13 @@ let FAScene = class {
 
     mouseDownHandle(e) {
         this.closeMenu();
-        if(e.button != 0) {return;}
+        if (e.button != 0) { return; }
         this.mousePressed = true;
-        let target = this.checkForElement(e.offsetX,e.offsetY);
-        if(target != null && !this.selected.includes(target)) {
+        let target = this.checkForElement(e.offsetX, e.offsetY);
+        if (target != null && !this.selected.includes(target)) {
             this.selected.push(target)
         }
-        else if(!this.ctrlPressed) {
+        else if (!this.ctrlPressed) {
             this.selected.length = 0;
             this.selectionBoxX = e.offsetX;
             this.selectionBoxY = e.offsetY;
@@ -393,48 +387,48 @@ let FAScene = class {
     }
 
     ctrlDown(e) {
-        if(e.key == "Control") {
+        if (e.key == "Control") {
             this.ctrlPressed = true;
         }
     }
 
     ctrlUp(e) {
-        if(e.key == "Control") {
+        if (e.key == "Control") {
             this.selected.length = 0;
             this.ctrlPressed = false;
             this.drawAll();
         }
     }
 
-    checkForElement(x,y) {
-        for(let c of FA.states) {
-            if(x < (c.x+c.radius) && x > (c.x-c.radius)
-                && y < (c.y+c.radius) && y > (c.y-c.radius)) {
-                    return c;
-                }
+    checkForElement(x, y) {
+        for (let c of FA.states) {
+            if (x < (c.x + c.radius) && x > (c.x - c.radius)
+                && y < (c.y + c.radius) && y > (c.y - c.radius)) {
+                return c;
+            }
         }
-        for(let t of FA.transitions) {
-            if(x < (t.x + (t.symbols.length*10)/2) && x > (t.x-(t.symbols.length*10)/2)
-            && y < (t.y + 6) && y > (t.y - 6)) {
+        for (let t of FA.transitions) {
+            if (x < (t.x + (t.symbols.length * 10) / 2) && x > (t.x - (t.symbols.length * 10) / 2)
+                && y < (t.y + 6) && y > (t.y - 6)) {
                 return t;
             }
         }
         return null;
     }
 
-    checkForElements(x1,y1,x2,y2) {
-        let xMin = Math.min(x1,x2);
-        let yMin = Math.min(y1,y2);
-        let xMax = Math.max(x1,x2);
-        let yMax = Math.max(y1,y2);
-        for(let c of FA.states) {
-            if(xMin < c.x && c.x < xMax
+    checkForElements(x1, y1, x2, y2) {
+        let xMin = Math.min(x1, x2);
+        let yMin = Math.min(y1, y2);
+        let xMax = Math.max(x1, x2);
+        let yMax = Math.max(y1, y2);
+        for (let c of FA.states) {
+            if (xMin < c.x && c.x < xMax
                 && yMin < c.y && c.y < yMax) {
-                    this.selected.push(c);
-                }
+                this.selected.push(c);
+            }
         }
-        for(let t of FA.transitions) {
-            if(xMin < t.x && t.x < xMax
+        for (let t of FA.transitions) {
+            if (xMin < t.x && t.x < xMax
                 && yMin < t.y && t.y < yMax) {
                 this.selected.push(t);
             }
