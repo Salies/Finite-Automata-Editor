@@ -127,6 +127,47 @@ class FAScene {
 
     // Cria a interface de criação de transições.
     private createTransitionCreationUI() {
-        
+        // Para qual estado?
+        const toStateDiv = document.createElement('div');
+        const toStateLabel = document.createElement('label');
+        toStateLabel.innerText = 'Para:';
+        const toStateInput = document.createElement('input');
+        toStateInput.id = 'targetInput';
+        toStateInput.type = 'text';
+        toStateDiv.appendChild(toStateLabel);
+        toStateDiv.appendChild(toStateInput);
+
+        // Qual símbolo?
+        const symbolDiv = document.createElement('div');
+        const symbolLabel = document.createElement('label');
+        symbolLabel.innerText = 'Símbolo:';
+        const symbolInput = document.createElement('input');
+        symbolInput.id = 'symbolInput';
+        symbolInput.type = 'text';
+        symbolDiv.appendChild(symbolLabel);
+        symbolDiv.appendChild(symbolInput);
+
+        // Div dos botões
+        const buttonDiv = document.createElement('div');
+
+        // Botão de criação
+        const createButton = document.createElement('button');
+        createButton.innerText = 'Criar';
+        createButton.id = 'transitionCreateButton';
+
+        // Botão de cancelamento
+        const cancelButton = document.createElement('button');
+        cancelButton.innerText = 'Cancelar';
+        cancelButton.id = 'transitionCancelButton';
+
+        // Adicionando os botões à div
+        buttonDiv.appendChild(createButton);
+        buttonDiv.appendChild(cancelButton);
+
+        // Montando a interface
+        this.transitionCreationUI.classList.add('menuItem');
+        this.transitionCreationUI.appendChild(toStateDiv);
+        this.transitionCreationUI.appendChild(symbolDiv);
+        this.transitionCreationUI.appendChild(buttonDiv);
     }
 }
