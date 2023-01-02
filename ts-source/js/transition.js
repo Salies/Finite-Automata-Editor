@@ -14,7 +14,6 @@ let Transition = class {
             this.x = fromState.x;
             this.y = fromState.y - fromState.radius - 30;
         }
-        this.cpRadius = 2;
         this.symbols = symbols;
         this.current = false;
     }
@@ -125,12 +124,5 @@ let Transition = class {
         P.y += B.y;
 
         return P;
-    }
-}
-
-let Point = class {
-    constructor(x,y) {
-        this.x = x;
-        this.y = y;
     }
 }

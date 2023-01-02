@@ -33,6 +33,8 @@ class FAScene {
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
+        // Fonte para o texto dos estados
+        if(this.context) this.context.font = '20px serif';
 
         // Criando as estruturas de dados base para criação dos elementos da tela.
         const menuOptionsNames = ['Adicionar estado', 'Remover estado', 'Adicionar transição', 'Final', 'Inicial'];
@@ -169,5 +171,12 @@ class FAScene {
         this.transitionCreationUI.appendChild(toStateDiv);
         this.transitionCreationUI.appendChild(symbolDiv);
         this.transitionCreationUI.appendChild(buttonDiv);
+    }
+
+    // Callback que abre o menu adequado como resposta a um clique com o botão direito do mouse.
+    private openMenu(e: MouseEvent) {
+        e.preventDefault();
+
+        // implementar o autôato antes de continuar
     }
 }

@@ -1,0 +1,4 @@
+//class FineAutomata {
+class FA {
+    
+}

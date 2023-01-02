@@ -16,7 +16,7 @@ let FAScene = class {
         //This contains the different types of menus.
         this.menuContainer = null;
         this.menuContainer = document.createElement("div");
-        this.menuContainer.style.position = "absolute";
+        this.menuContainer.classList.add("menu-wrapper");
 
         //The default menu is used when right clicking on a blank spot on the canvas.
         //It contains only the "Add State" option.
@@ -207,7 +207,7 @@ let FAScene = class {
     openMenu(e) {
         e.preventDefault();
         this.menuContainer.x = e.offsetX;
-        this.menuContainer.y = e.offsetY;
+        this.menuContainer.y = e.   offsetY;
         this.menuContainer.selected = this.checkForElement(e.offsetX,e.offsetY);
 
         if(this.menuContainer.selected == null) {
@@ -266,8 +266,6 @@ let FAScene = class {
     cancelStateCreate() {
         //Clear addStateMenu inputs
         document.getElementById("stateLabelInput").value = "";
-        document.getElementById("stateAcceptInput").checked = false;
-        document.getElementById("stateStartInput").checked = false;
         this.closeMenu();
     }
 
