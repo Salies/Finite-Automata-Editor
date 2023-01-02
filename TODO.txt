@@ -1,0 +1,2 @@
+trocar os nomes de classes/ids (css) nos typescript
+eu mantive os originais pra poder testar

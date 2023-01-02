@@ -114,9 +114,11 @@ let FAScene = class {
         this.addStateMenu.className = "menuItem";
         this.addStateMenu.appendChild(addStateTitle);
         this.addStateMenu.appendChild(stateLabelDiv);
-        this.addStateMenu.appendChild(stateAcceptDiv);
-        this.addStateMenu.appendChild(stateStartDiv);
+        //this.addStateMenu.appendChild(stateAcceptDiv);
+        //this.addStateMenu.appendChild(stateStartDiv);
         this.addStateMenu.appendChild(stateButtonDiv);
+
+        // Parei aqui
 
         //The Add Transition menu is used for transition creation
 
@@ -242,10 +244,10 @@ let FAScene = class {
     createState() {
         let label = document.getElementById("stateLabelInput").value;
         document.getElementById("stateLabelInput").value = "";
-        let accept = document.getElementById("stateAcceptInput").checked;
-        document.getElementById("stateAcceptInput").checked = false;
-        let start = document.getElementById("stateStartInput").checked;
-        document.getElementById("stateStartInput").checked = false;
+        let accept = false;
+        //document.getElementById("stateAcceptInput").checked = false;
+        let start = false;
+        //document.getElementById("stateStartInput").checked = false;
         let s = FA.findState(label);
         if(label == "") {
             alert("Error: The state label cannot be blank.")
