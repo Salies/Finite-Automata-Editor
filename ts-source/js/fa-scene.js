@@ -47,27 +47,6 @@ let FAScene = class {
         this.addTransitionMenu = document.createElement('div');
         const { transitionCreateButton, transitionCancelButton } = this.createTransitionCreationUI();
 
-        //Bind functions
-        this.drawAll = this.drawAll.bind(this);
-        this.mouseUpHandle = this.mouseUpHandle.bind(this);
-        this.mouseDownHandle = this.mouseDownHandle.bind(this);
-        this.mouseMoveHandle = this.mouseMoveHandle.bind(this);
-        this.openMenu = this.openMenu.bind(this);
-        this.closeMenu = this.closeMenu.bind(this);
-        this.createState = this.createState.bind(this);
-        this.checkForElement = this.checkForElement.bind(this);
-        this.openAddStateMenu = this.openAddStateMenu.bind(this);
-        this.cancelStateCreate = this.cancelStateCreate.bind(this);
-        this.cancelTransitionCreate = this.cancelTransitionCreate.bind(this);
-        this.changeAccept = this.changeAccept.bind(this);
-        this.makeStart = this.makeStart.bind(this);
-        this.openAddTransitionMenu = this.openAddTransitionMenu.bind(this);
-        this.createTransition = this.createTransition.bind(this);
-        this.deleteState = this.deleteState.bind(this);
-        this.deleteTransition = this.deleteTransition.bind(this);
-        this.ctrlDown = this.ctrlDown.bind(this);
-        this.ctrlUp = this.ctrlUp.bind(this);
-
         //Register event listeners
         this.canvas.addEventListener("mousemove", this.mouseMoveHandle);
         this.canvas.addEventListener("mousedown", this.mouseDownHandle);
@@ -198,7 +177,7 @@ let FAScene = class {
 
     //Checks where the right mouse button was clicked,
     //and opens the appropriate menu.
-    openMenu(e) {
+    openMenu = (e) => {
         e.preventDefault();
         this.menuContainer.x = e.offsetX;
         this.menuContainer.y = e.offsetY;
@@ -221,21 +200,21 @@ let FAScene = class {
         this.drawAll()
     }
 
-    closeMenu() {
+    closeMenu = () => {
         if (this.menuContainer.parentNode) {
             this.menuContainer.parentNode.removeChild(this.menuContainer);
             this.menuContainer.removeChild(this.menuContainer.firstChild);
         }
     }
 
-    openAddStateMenu() {
+    openAddStateMenu = () => {
         this.closeMenu();
         this.menuContainer.appendChild(this.addStateMenu);
         document.getElementById("canvasDiv").appendChild(this.menuContainer);
         this.drawAll();
     }
 
-    createState() {
+    createState = () => {
         let label = document.getElementById("stateLabelInput").value;
         document.getElementById("stateLabelInput").value = "";
         let accept = false;
@@ -257,19 +236,19 @@ let FAScene = class {
     }
 
     //Cancels the creation for both the addStateMenu
-    cancelStateCreate() {
+    cancelStateCreate = () => {
         //Clear addStateMenu inputs
         document.getElementById("stateLabelInput").value = "";
         this.closeMenu();
     }
 
-    changeAccept() {
+    changeAccept = () => {
         this.menuContainer.selected.accept = !this.menuContainer.selected.accept;
         this.drawAll();
         this.closeMenu();
     }
 
-    makeStart() {
+    makeStart = () => {
         FA.setStart(this.menuContainer.selected);
         this.drawAll();
         this.closeMenu();
@@ -277,20 +256,20 @@ let FAScene = class {
 
     //Deletes all transitions connected to the selected state,
     //then deletes the state.
-    deleteState() {
+    deleteState = () => {
         FA.removeState(this.menuContainer.selected);
         this.drawAll();
         this.closeMenu();
     }
 
-    openAddTransitionMenu() {
+    openAddTransitionMenu = () => {
         this.closeMenu();
         this.menuContainer.appendChild(this.addTransitionMenu);
         document.getElementById("canvasDiv").appendChild(this.menuContainer);
         this.drawAll();
     }
 
-    createTransition() {
+    createTransition = () => {
         let toStateLabel = document.getElementById("targetInput").value;
         document.getElementById("targetInput").value = "";
         let toState = FA.findState(toStateLabel);
@@ -312,7 +291,7 @@ let FAScene = class {
         this.closeMenu();
     }
 
-    cancelTransitionCreate() {
+    cancelTransitionCreate = () => {
         //Clear addTransitionMenu inputs
         document.getElementById("targetInput").value = "";
         document.getElementById("symbolInput").value = "";
@@ -320,14 +299,14 @@ let FAScene = class {
     }
 
     //Deletes the selected transition
-    deleteTransition() {
+    deleteTransition = () => {
         FA.removeTransition(this.menuContainer.selected);
         this.drawAll();
         this.closeMenu();
     }
 
     //Clears the canvas and draws all components of the FA.
-    drawAll() {
+    drawAll = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let s of FA.states) {
             s.draw(this.ctx);
@@ -346,7 +325,7 @@ let FAScene = class {
         }
     }
 
-    mouseUpHandle(e) {
+    mouseUpHandle = (e) => {
         if (this.selectionBoxX != null) {
             this.checkForElements(this.selectionBoxX, this.selectionBoxY, this.lastX, this.lastY);
             this.selectionBoxX = null;
@@ -358,7 +337,7 @@ let FAScene = class {
         this.mousePressed = false;
     }
 
-    mouseMoveHandle(e) {
+    mouseMoveHandle = (e) => {
         this.deltaX = e.offsetX - this.lastX;
         this.deltaY = e.offsetY - this.lastY;
         this.lastX = e.offsetX;
@@ -371,7 +350,7 @@ let FAScene = class {
         }
     }
 
-    mouseDownHandle(e) {
+    mouseDownHandle = (e) => {
         this.closeMenu();
         if (e.button != 0) { return; }
         this.mousePressed = true;
@@ -386,13 +365,13 @@ let FAScene = class {
         }
     }
 
-    ctrlDown(e) {
+    ctrlDown = (e) => {
         if (e.key == "Control") {
             this.ctrlPressed = true;
         }
     }
 
-    ctrlUp(e) {
+    ctrlUp = (e) => {
         if (e.key == "Control") {
             this.selected.length = 0;
             this.ctrlPressed = false;
@@ -400,7 +379,7 @@ let FAScene = class {
         }
     }
 
-    checkForElement(x, y) {
+    checkForElement = (x, y) => {
         for (let c of FA.states) {
             if (x < (c.x + c.radius) && x > (c.x - c.radius)
                 && y < (c.y + c.radius) && y > (c.y - c.radius)) {
