@@ -1,15 +1,16 @@
 /*
     Principal classe da interface.
-    Lida com o desenho, possíveis movimentos, e entrada de dados no canvas.
+    Lida com o desenho, possíveis movimentos, e entrada de dados no canvas passado a ela.
 
     Mesmo não sendo o jeito mais limpo e atual de ser fazer uma interface JS,
-    tomei a abordagem tradicional (como em um frameowrk de UI) de criar uma classe
+    tomei a abordagem tradicional (como em Qt, por exemplo) de criar uma classe
     e ir instanciando nela os elementos da interface.
 
     Sinceramente, a melhor abordagem seria usar algo como React, mas dado o escopo do projeto,
     não vimos necessidade.
 */
-//class AutomataCanvas {
+
+//class CanvasController {
 class FAScene {
     // Base para desenho do autômato.
     private canvas: HTMLCanvasElement;
@@ -64,6 +65,9 @@ class FAScene {
 
         this.stateCreationUI = document.createElement('div');
         this.createStateCreationUI();
+
+        this.transitionCreationUI = document.createElement('div');
+        this.createTransitionCreationUI();
     }
 
     // Cria a interface de criação de estados.
@@ -123,6 +127,6 @@ class FAScene {
 
     // Cria a interface de criação de transições.
     private createTransitionCreationUI() {
-
+        
     }
 }

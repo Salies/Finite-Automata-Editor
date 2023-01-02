@@ -92,7 +92,6 @@ let FA = class {
 
     //Processes epsilon transitions without consuming the next symbol.
     static processEpsilons() {
-        let seenStates = [];
         let epsilonTransitions = [];
         for(let transition of FA.transitions) {
             console.log();
