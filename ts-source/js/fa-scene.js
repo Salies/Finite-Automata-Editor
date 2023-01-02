@@ -26,6 +26,12 @@ let FAScene = class {
             menuOptions[optionName].classList.add('menuItem');
         });
 
+        // O menu de definir como final é criado separadamente porque ele é um checkbox.
+        const setFinalCheckbox = document.createElement('input');
+        setFinalCheckbox.type = 'checkbox';
+        setFinalCheckbox.id = 'setFinalCheckbox';
+        menuOptions['Final'].appendChild(setFinalCheckbox);
+
         // Construindo o menu para clique em um lugar vazio da tela.
         this.defaultMenu = document.createElement('div');
         this.defaultMenu.appendChild(menuOptions['Adicionar estado']);
@@ -61,7 +67,7 @@ let FAScene = class {
         menuOptions['Adicionar estado'].addEventListener("click", this.openAddStateMenu);
         stateCreateButton.addEventListener("click", this.createState);
         stateCancelButton.addEventListener("click", this.cancelStateCreate);
-        menuOptions['Final'].addEventListener("click", this.changeAccept);
+        setFinalCheckbox.addEventListener("click", this.toggleFinal);
         menuOptions['Definir como inicial'].addEventListener("click", this.makeStart);
         menuOptions['Adicionar transição'].addEventListener("click", this.openAddTransitionMenu);
         transitionCreateButton.addEventListener("click", this.createTransition);
@@ -183,56 +189,57 @@ let FAScene = class {
         this.menuContainer.y = e.offsetY;
         this.menuContainer.selected = this.checkForElement(e.offsetX, e.offsetY);
 
-        if (this.menuContainer.selected == null) {
+        if (this.menuContainer.selected == null)
             this.menuContainer.appendChild(this.defaultMenu);
-        }
-        else if (this.menuContainer.selected instanceof State) {
+        else if (this.menuContainer.selected instanceof State)
             this.menuContainer.appendChild(this.stateMenu);
-        }
-        else if (this.menuContainer.selected instanceof Transition) {
+        else if (this.menuContainer.selected instanceof Transition)
             this.menuContainer.appendChild(this.transitionMenu);
-        }
 
-        this.menuContainer.style.top = String(e.offsetY) + "px";
-        this.menuContainer.style.left = String(e.offsetX) + "px";
+        this.menuContainer.style.top = `${e.offsetY}px`;
+        this.menuContainer.style.left = `${e.offsetX}px`;
 
         document.getElementById("canvasDiv").appendChild(this.menuContainer);
-        this.drawAll()
+
+        this.redraw()
     }
 
     closeMenu = () => {
-        if (this.menuContainer.parentNode) {
-            this.menuContainer.parentNode.removeChild(this.menuContainer);
-            this.menuContainer.removeChild(this.menuContainer.firstChild);
-        }
+        if (!this.menuContainer.parentNode) return;
+
+        this.menuContainer.parentNode.removeChild(this.menuContainer);
+        this.menuContainer.removeChild(this.menuContainer.firstChild);
     }
 
     openAddStateMenu = () => {
         this.closeMenu();
         this.menuContainer.appendChild(this.addStateMenu);
         document.getElementById("canvasDiv").appendChild(this.menuContainer);
-        this.drawAll();
+        this.redraw();
     }
 
     createState = () => {
-        let label = document.getElementById("stateLabelInput").value;
-        document.getElementById("stateLabelInput").value = "";
-        let accept = false;
-        //document.getElementById("stateAcceptInput").checked = false;
-        let start = false;
-        //document.getElementById("stateStartInput").checked = false;
-        let s = FA.findState(label);
-        if (label == "") {
+        const label = document.getElementById("stateLabelInput");
+        const previousLabelValue = label.value;
+
+        if (previousLabelValue == "") {
             alert("Error: The state label cannot be blank.")
+            return;
         }
-        else if (s != null) {
-            alert("Error: A state already exists with label " + label + ".");
+
+        // Verifica se já existe um estado com o mesmo nome
+        if (FA.findState(previousLabelValue) != null) {
+            alert("Error: A state already exists with label " + previousLabelValue + ".");
+            return;
         }
-        else {
-            FA.addState(this.menuContainer.x, this.menuContainer.y, start, accept, label);
-        }
-        this.drawAll();
+
+        FA.addState(this.menuContainer.x, this.menuContainer.y, previousLabelValue);
+
+        this.redraw();
         this.closeMenu();
+
+        //Limpando o input
+        label.value = "";
     }
 
     //Cancels the creation for both the addStateMenu
@@ -242,15 +249,15 @@ let FAScene = class {
         this.closeMenu();
     }
 
-    changeAccept = () => {
-        this.menuContainer.selected.accept = !this.menuContainer.selected.accept;
-        this.drawAll();
+    toggleFinal = (e) => {
+        this.menuContainer.selected.accept = e.target.checked;
+        this.redraw();
         this.closeMenu();
     }
 
     makeStart = () => {
         FA.setStart(this.menuContainer.selected);
-        this.drawAll();
+        this.redraw();
         this.closeMenu();
     }
 
@@ -258,7 +265,7 @@ let FAScene = class {
     //then deletes the state.
     deleteState = () => {
         FA.removeState(this.menuContainer.selected);
-        this.drawAll();
+        this.redraw();
         this.closeMenu();
     }
 
@@ -266,29 +273,41 @@ let FAScene = class {
         this.closeMenu();
         this.menuContainer.appendChild(this.addTransitionMenu);
         document.getElementById("canvasDiv").appendChild(this.menuContainer);
-        this.drawAll();
+        this.redraw();
     }
 
     createTransition = () => {
-        let toStateLabel = document.getElementById("targetInput").value;
-        document.getElementById("targetInput").value = "";
-        let toState = FA.findState(toStateLabel);
-        let symbols = document.getElementById("symbolInput").value;
-        document.getElementById("symbolInput").value = "";
-        if (toStateLabel == "") {
+        const previousToState = document.getElementById("targetInput");
+        const previousToStateName = previousToState.value;
+
+        const toState = FA.findState(previousToStateName);
+
+        const symbols = document.getElementById("symbolInput");
+        const previousSymbols = symbols.value;
+
+        if (previousToStateName == "") {
             alert("Error: The state label cannot be blank.");
+            return;
         }
-        else if (symbols == "") {
+
+        if (previousSymbols == "") {
             alert("Error: There must be at least one symbol.");
+            return;
         }
-        else if (toState == null) {
-            alert("Error: There is no state with label " + toStateLabel + ".");
+
+        if (toState == null) {
+            alert("Error: There is no state with label " + previousToStateName + ".");
+            return;
         }
-        else {
-            FA.addTransition(this.menuContainer.selected, toState, symbols);
-        }
-        this.drawAll();
+
+        FA.addTransition(this.menuContainer.selected, toState, previousSymbols);
+
+        this.redraw();
         this.closeMenu();
+
+        // Limpando os inputs
+        previousToState.value = "";
+        symbols.value = "";
     }
 
     cancelTransitionCreate = () => {
@@ -301,12 +320,12 @@ let FAScene = class {
     //Deletes the selected transition
     deleteTransition = () => {
         FA.removeTransition(this.menuContainer.selected);
-        this.drawAll();
+        this.redraw();
         this.closeMenu();
     }
 
     //Clears the canvas and draws all components of the FA.
-    drawAll = () => {
+    redraw = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         for (let s of FA.states) {
             s.draw(this.ctx);
@@ -346,7 +365,7 @@ let FAScene = class {
             for (let element of this.selected) {
                 element.move(element.x + (this.deltaX), element.y + (this.deltaY));
             }
-            this.drawAll();
+            this.redraw();
         }
     }
 
@@ -375,7 +394,7 @@ let FAScene = class {
         if (e.key == "Control") {
             this.selected.length = 0;
             this.ctrlPressed = false;
-            this.drawAll();
+            this.redraw();
         }
     }
 

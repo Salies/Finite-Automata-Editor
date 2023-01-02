@@ -6,12 +6,9 @@ let FA = class {
     static input = "";
     static inputIndex = 0;
 
-    static addState(x,y,start,accept,label) {
-        let state = new State(x,y,15,accept,label);
+    static addState(x, y,label) {
+        const state = new State(x, y, 15, false, label);
         FA.states.push(state);
-        if(start) {
-            FA.setStart(state);
-        }
     }
 
     static addTransition(from, to, symbols, x = null, y = null) {

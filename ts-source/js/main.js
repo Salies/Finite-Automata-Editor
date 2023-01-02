@@ -37,7 +37,7 @@ function setInputHandler() {
     if(!verifyStartExists()) {return;}
     let stringInput = document.getElementById("stringInput");
     FA.reset(stringInput.value);
-    scene.drawAll();
+    scene.redraw();
     let stepDisplay = document.getElementById("stepDisplay");
 
     while(stepDisplay.firstChild) {
@@ -55,7 +55,7 @@ function setInputHandler() {
 function reset() {
     if(!verifyStartExists()) {return;}
     FA.reset();
-    scene.drawAll();
+    scene.redraw();
     let stepDisplay = document.getElementById("stepDisplay");
     while(stepDisplay.firstChild) {
         stepDisplay.removeChild(stepDisplay.firstChild);
@@ -89,7 +89,7 @@ function stepButtonHandler() {
         return;
     }
     FA.step();
-    scene.drawAll()
+    scene.redraw()
 
     stepDisplay.childNodes[FA.inputIndex].style.color = "blue";
 
@@ -100,15 +100,15 @@ function stepButtonHandler() {
 function newFA() {
     if(confirm("Are you sure you want to start a new FA?\nAny unsaved work will be lost.")) {
         FA.newFA();
-        scene.drawAll();
+        scene.redraw();
     }
 }
 
-FA.addState(200,200,true,false,"S");
-FA.addState(400,100,false,true,"A");
-FA.addState(600,100,false,false,"B");
-FA.addState(400,300,false,true,"C");
-FA.addState(600,300,false,false,"D");
+FA.addState(200,200,"S");
+FA.addState(400,100,"A");
+FA.addState(600,100,"B");
+FA.addState(400,300,"C");
+FA.addState(600,300,"D");
 
 FA.addTransition(FA.states[0],FA.states[1],"0");
 FA.addTransition(FA.states[0],FA.states[3],"1");
@@ -155,4 +155,4 @@ FA.transitions[8].y = 255;
 FA.transitions[9].x = 495;
 FA.transitions[9].y = 267;
 
-scene.drawAll();
+scene.redraw();
