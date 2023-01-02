@@ -200,6 +200,8 @@ let FAScene = class {
         this.menuContainer.style.left = `${e.offsetX}px`;
 
         document.getElementById("canvasDiv").appendChild(this.menuContainer);
+        if (this.menuContainer.selected instanceof State)
+            document.querySelector("#setFinalCheckbox").checked = this.menuContainer.selected.accept;
 
         this.redraw()
     }
