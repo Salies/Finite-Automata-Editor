@@ -3,7 +3,7 @@
 This class handles drawing elements to the canvas and
 user input on the canvas.
 */
-let FAScene = class {
+class CanvasController {
     constructor(canvas, fa) {
         this.fa = fa;
         this.canvas = canvas;

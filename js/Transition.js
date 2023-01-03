@@ -1,4 +1,4 @@
-let Transition = class {
+class Transition {
     constructor(fromState, toState, symbols, x = null, y = null) {
         this.fromState = fromState;
         this.toState = toState;

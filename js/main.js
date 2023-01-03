@@ -1,4 +1,4 @@
-const fa = new FA();
+const fa = new Automata();
 
 let cWidth = document.getElementById("controlBar").clientWidth;
 let cHeight = document.getElementById("canvasDiv").clientHeight;
@@ -9,7 +9,7 @@ canvas.height = cHeight;
 canvas.style.border = "1px solid #000000";
 document.getElementById("canvasDiv").appendChild(canvas);
 
-let scene = new FAScene(canvas, fa);
+let scene = new CanvasController(canvas, fa);
 let autoTimer = null;
 
 let stepButton = document.getElementById("step");

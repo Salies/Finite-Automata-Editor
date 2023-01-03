@@ -1,5 +1,5 @@
 
-class FA {
+class Automata {
     startState = null;
     states = [];
     transitions = [];

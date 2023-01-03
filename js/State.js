@@ -1,4 +1,4 @@
-let State = class {
+class State {
     constructor(x, y, radius, accept, label) {
         this.x = x;
         this.y = y;
