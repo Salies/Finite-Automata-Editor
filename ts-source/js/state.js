@@ -16,38 +16,44 @@ let State = class {
 
     draw(ctx) {
         ctx.save();
+
         if(this.current) {
             ctx.strokeStyle = "blue";
             ctx.fillStyle = "blue";
         }
+        
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.stroke();
 
         ctx.fillText(this.label, this.x - 7, this.y + 6);
 
-        if(this.start) {
-            ctx.save();
-            ctx.strokeStyle = "black";
-            ctx.fillStyle = "black";
-            ctx.beginPath();
-            ctx.moveTo(this.x - this.radius - 25, this.y);
-            ctx.lineTo(this.x - this.radius, this.y);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.lineTo(this.x - this.radius - 10, this.y - 5);
-            ctx.lineTo(this.x - this.radius - 10, this.y + 5);
-            ctx.lineTo(this.x - this.radius, this.y);
-            ctx.fill();
-            ctx.restore();
-        }
+        if(this.start) this.drawStart();
 
-        if(this.accept) {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius - 3, 0, 2 * Math.PI);
-            ctx.stroke();
-        }
+        if(this.accept) this.drawAccept();
 
         ctx.restore();
+    }
+
+    drawStart() {
+        ctx.save();
+        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
+        ctx.beginPath();
+        ctx.moveTo(this.x - this.radius - 25, this.y);
+        ctx.lineTo(this.x - this.radius, this.y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.lineTo(this.x - this.radius - 10, this.y - 5);
+        ctx.lineTo(this.x - this.radius - 10, this.y + 5);
+        ctx.lineTo(this.x - this.radius, this.y);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    drawAccept() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius - 3, 0, 2 * Math.PI);
+        ctx.stroke();
     }
 }
