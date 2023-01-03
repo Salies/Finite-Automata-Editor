@@ -285,15 +285,10 @@ let FAScene = class {
         const toState = FA.findState(previousToStateName);
 
         const symbols = document.getElementById("symbolInput");
-        const previousSymbols = symbols.value;
+        let previousSymbols = symbols.value;
 
         if (previousToStateName == "") {
             alert("Error: The state label cannot be blank.");
-            return;
-        }
-
-        if (previousSymbols == "") {
-            alert("Error: There must be at least one symbol.");
             return;
         }
 
@@ -301,6 +296,10 @@ let FAScene = class {
             alert("Error: There is no state with label " + previousToStateName + ".");
             return;
         }
+
+        // Se em branco, assume lambda
+        if (previousSymbols == "")
+            previousSymbols = "λ";
 
         FA.addTransition(this.menuContainer.selected, toState, previousSymbols);
 
