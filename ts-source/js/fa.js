@@ -1,59 +1,59 @@
 
-let FA = class {
-    static startState = null;
-    static states = [];
-    static transitions = [];
+class FA {
+    startState = null;
+    states = [];
+    transitions = [];
     // Variáveis para processamento de cadeias
-    static input = "";
-    static inputIndex = 0;
+    input = "";
+    inputIndex = 0;
 
-    static addState(x, y,label) {
+    addState(x, y,label) {
         const state = new State(x, y, 15, false, label);
-        FA.states.push(state);
+        this.states.push(state);
     }
 
-    static addTransition(from, to, symbols, x = null, y = null) {
+    addTransition(from, to, symbols, x = null, y = null) {
         const transition = new Transition(from, to, symbols, x, y);
-        FA.transitions.push(transition);
+        this.transitions.push(transition);
     }
 
-    static removeState(state) {
-        const stateTransitions = FA.transitions.filter(t => t.fromState == state || t.toState == state);
-        stateTransitions.forEach(t => FA.removeTransition(t));
+    removeState(state) {
+        const stateTransitions = this.transitions.filter(t => t.fromState == state || t.toState == state);
+        stateTransitions.forEach(t => this.removeTransition(t));
 
-        FA.states = FA.states.filter(s => s != state);
+        this.states = this.states.filter(s => s != state);
 
-        if(state.start) FA.startState = null;
+        if(state.start) this.startState = null;
     }
 
-    static removeTransition(transition) {
-        FA.transitions = FA.transitions.filter(t => t != transition);
+    removeTransition(transition) {
+        this.transitions = this.transitions.filter(t => t != transition);
     }
 
-    static setStart(state) {
+    setStart(state) {
         // Se já existe um estado inicial...
-        if(FA.startState != null) FA.startState.start = false;
-        FA.startState = state;
+        if(this.startState != null) this.startState.start = false;
+        this.startState = state;
         state.start = true;
     }
 
-    static reset(input = null) {
+    reset(input = null) {
         if(input != null)
-            FA.input = input;
-        FA.inputIndex = 0;
+            this.input = input;
+        this.inputIndex = 0;
 
-        const elements = FA.states.concat(FA.transitions);
+        const elements = this.states.concat(this.transitions);
         elements.forEach(e => e.current = false);
 
-        FA.startState.current = true;
-        FA.processEpsilons();
+        this.startState.current = true;
+        this.processEpsilons();
     }
 
-    static step() {
-        const symbol = FA.input.charAt(FA.inputIndex);
+    step() {
+        const symbol = this.input.charAt(this.inputIndex);
         let currentTransitions = [];
         //Find all transitions that will be traveled with this step
-        for(let transition of FA.transitions) {
+        for(let transition of this.transitions) {
             if(transition.symbols.includes(symbol) && transition.fromState.current) {
                 currentTransitions.push(transition);
                 transition.current = true;
@@ -64,19 +64,19 @@ let FA = class {
         }
 
         //Remove previous states first...
-        FA.states.forEach(s => s.current = false);
+        this.states.forEach(s => s.current = false);
         
         //Then set the new current states
         currentTransitions.forEach(t => t.toState.current = true);
 
-        FA.processEpsilons();
+        this.processEpsilons();
     }
 
     //Processes epsilon transitions without consuming the next symbol.
-    static processEpsilons() {
+    processEpsilons() {
         let epsilonTransitions = [];
         
-        epsilonTransitions = FA.transitions.filter(t => t.symbols.includes("λ"));
+        epsilonTransitions = this.transitions.filter(t => t.symbols.includes("λ"));
 
         let updated = true;
 
@@ -95,33 +95,33 @@ let FA = class {
         }
     }
 
-    //Returns the state of this FA with the given label,
+    //Returns the state of this this with the given label,
     //or null if such a state does not exist.
-    static findState(label) {
-        return FA.states.find(s => s.label == label);
+    findState(label) {
+        return this.states.find(s => s.label == label);
     }
 
     //Deletes all states and transitions, leaving a blank canvas.
-    static newFA() {
-        FA.startState = null;
-        FA.states.length = 0;
-        FA.transitions.length = 0;
-        FA.input = "";
-        FA.inputIndex = 0;
+    newthis() {
+        this.startState = null;
+        this.states.length = 0;
+        this.transitions.length = 0;
+        this.input = "";
+        this.inputIndex = 0;
     }
 
-    //Returns a string representation of the current FA
+    //Returns a string representation of the current this
     // TODO: refazer no formato da lib de conversão
-    static toString() {
+    toString() {
         let out = [];
         out.push("States");
-        for(let s of FA.states) {
+        for(let s of this.states) {
             let line = [];
             line.push(s.x,s.y,s.start,s.accept,s.label);
             out.push(line.join());
         }
         out.push("Transitions");
-        for(let t of FA.transitions) {
+        for(let t of this.transitions) {
             let line = [];
             line.push(t.fromState.label,t.toState.label,t.symbols,t.x,t.y);
             out.push(line.join());

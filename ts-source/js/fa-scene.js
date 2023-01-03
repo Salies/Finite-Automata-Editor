@@ -4,7 +4,8 @@ This class handles drawing elements to the canvas and
 user input on the canvas.
 */
 let FAScene = class {
-    constructor(canvas) {
+    constructor(canvas, fa) {
+        this.fa = fa;
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
         this.ctx.font = "20px serif";
@@ -230,12 +231,12 @@ let FAScene = class {
         }
 
         // Verifica se já existe um estado com o mesmo nome
-        if (FA.findState(previousLabelValue) != null) {
+        if (this.fa.findState(previousLabelValue) != null) {
             alert("Error: A state already exists with label " + previousLabelValue + ".");
             return;
         }
 
-        FA.addState(this.menuContainer.x, this.menuContainer.y, previousLabelValue);
+        this.fa.addState(this.menuContainer.x, this.menuContainer.y, previousLabelValue);
 
         this.redraw();
         this.closeMenu();
@@ -258,7 +259,7 @@ let FAScene = class {
     }
 
     makeStart = () => {
-        FA.setStart(this.menuContainer.selected);
+        this.fa.setStart(this.menuContainer.selected);
         this.redraw();
         this.closeMenu();
     }
@@ -266,7 +267,7 @@ let FAScene = class {
     //Deletes all transitions connected to the selected state,
     //then deletes the state.
     deleteState = () => {
-        FA.removeState(this.menuContainer.selected);
+        this.fa.removeState(this.menuContainer.selected);
         this.redraw();
         this.closeMenu();
     }
@@ -282,7 +283,7 @@ let FAScene = class {
         const previousToState = document.getElementById("targetInput");
         const previousToStateName = previousToState.value;
 
-        const toState = FA.findState(previousToStateName);
+        const toState = this.fa.findState(previousToStateName);
 
         const symbols = document.getElementById("symbolInput");
         let previousSymbols = symbols.value;
@@ -297,11 +298,10 @@ let FAScene = class {
             return;
         }
 
-        // Se em branco, assume lambda
         if (previousSymbols == "")
             previousSymbols = "λ";
 
-        FA.addTransition(this.menuContainer.selected, toState, previousSymbols);
+        this.fa.addTransition(this.menuContainer.selected, toState, previousSymbols);
 
         this.redraw();
         this.closeMenu();
@@ -320,7 +320,7 @@ let FAScene = class {
 
     //Deletes the selected transition
     deleteTransition = () => {
-        FA.removeTransition(this.menuContainer.selected);
+        this.fa.removeTransition(this.menuContainer.selected);
         this.redraw();
         this.closeMenu();
     }
@@ -329,7 +329,7 @@ let FAScene = class {
     redraw = () => {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         // Junta os estados e as transições do autômato, a serem desenhados, em uma lista
-        const elements = FA.states.concat(FA.transitions);
+        const elements = this.fa.states.concat(this.fa.transitions);
         elements.forEach(e => e.draw(this.ctx));
 
         if (this.selectionBoxX == null) return;
@@ -403,12 +403,12 @@ let FAScene = class {
     }
 
     checkForElement = (x, y) => {
-        for (let s of FA.states) {
+        for (let s of this.fa.states) {
             if (x < (s.x + s.radius) && x > (s.x - s.radius) && y < (s.y + s.radius) && y > (s.y - s.radius))
                 return s;
         }
 
-        for (let t of FA.transitions) {
+        for (let t of this.fa.transitions) {
             if (x < (t.x + (t.symbols.length * 10) / 2) && x > (t.x - (t.symbols.length * 10) / 2) && y < (t.y + 6) && y > (t.y - 6))
                 return t;
         }
@@ -420,7 +420,7 @@ let FAScene = class {
     checkForElements(x1, y1, x2, y2) {
         const [xMin, yMin, xMax, yMax] = [Math.min(x1,x2), Math.min(y1,y2), Math.max(x1,x2), Math.max(y1,y2)];
 
-        const elements = FA.states.concat(FA.transitions).filter(e => xMin < e.x && e.x < xMax && yMin < e.y && e.y < yMax);
+        const elements = this.fa.states.concat(this.fa.transitions).filter(e => xMin < e.x && e.x < xMax && yMin < e.y && e.y < yMax);
         this.selected = this.selected.concat(elements);
     }
 }

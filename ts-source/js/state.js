@@ -28,14 +28,14 @@ let State = class {
 
         ctx.fillText(this.label, this.x - 7, this.y + 6);
 
-        if(this.start) this.drawStart();
+        if(this.start) this.drawStart(ctx);
 
-        if(this.accept) this.drawAccept();
+        if(this.accept) this.drawAccept(ctx);
 
         ctx.restore();
     }
 
-    drawStart() {
+    drawStart(ctx) {
         ctx.save();
         ctx.strokeStyle = "black";
         ctx.fillStyle = "black";
@@ -51,7 +51,7 @@ let State = class {
         ctx.restore();
     }
 
-    drawAccept() {
+    drawAccept(ctx) {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius - 3, 0, 2 * Math.PI);
         ctx.stroke();
