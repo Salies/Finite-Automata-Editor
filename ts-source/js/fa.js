@@ -3,6 +3,7 @@ let FA = class {
     static startState = null;
     static states = [];
     static transitions = [];
+    // Variáveis para processamento de cadeias
     static input = "";
     static inputIndex = 0;
 
@@ -43,55 +44,52 @@ let FA = class {
 
         const elements = FA.states.concat(FA.transitions);
         elements.forEach(e => e.current = false);
-        
+
         FA.startState.current = true;
         FA.processEpsilons();
     }
 
     static step() {
-        let symbol = FA.input.charAt(FA.inputIndex);
+        const symbol = FA.input.charAt(FA.inputIndex);
         let currentTransitions = [];
-        let excludeStates = [];
         //Find all transitions that will be traveled with this step
         for(let transition of FA.transitions) {
             if(transition.symbols.includes(symbol) && transition.fromState.current) {
                 currentTransitions.push(transition);
                 transition.current = true;
+                continue;
             }
-            else {
-                transition.current = false;
-            }
+
+            transition.current = false;
         }
+
         //Remove previous states first...
-        for(let state of FA.states) {
-            state.current=false;
-        }
+        FA.states.forEach(s => s.current = false);
+        
         //Then set the new current states
-        for(let transition of currentTransitions) {
-            transition.toState.current = true;
-        }
+        currentTransitions.forEach(t => t.toState.current = true);
+
         FA.processEpsilons();
     }
 
     //Processes epsilon transitions without consuming the next symbol.
     static processEpsilons() {
         let epsilonTransitions = [];
-        for(let transition of FA.transitions) {
-            console.log();
-            if(transition.symbols.includes("e")) {
-                epsilonTransitions.push(transition);
-            }
-        }
+        
+        epsilonTransitions = FA.transitions.filter(t => t.symbols.includes("λ"));
+
         let updated = true;
+
         while(updated) {
             updated = false;
+
             for(let transition of epsilonTransitions) {
-                if(transition.fromState.current) {
-                    transition.current = true;
-                    if(!transition.toState.current) {
-                        transition.toState.current = true;
-                        updated = true;
-                    }
+                if(!transition.fromState.current) continue;
+                transition.current = true;
+
+                if(!transition.toState.current) {
+                    transition.toState.current = true;
+                    updated = true;
                 }
             }
         }
@@ -100,12 +98,7 @@ let FA = class {
     //Returns the state of this FA with the given label,
     //or null if such a state does not exist.
     static findState(label) {
-        for(let state of FA.states) {
-            if(state.label == label) {
-                return state;
-            }
-        }
-        return null;
+        return FA.states.find(s => s.label == label);
     }
 
     //Deletes all states and transitions, leaving a blank canvas.
@@ -118,6 +111,7 @@ let FA = class {
     }
 
     //Returns a string representation of the current FA
+    // TODO: refazer no formato da lib de conversão
     static toString() {
         let out = [];
         out.push("States");

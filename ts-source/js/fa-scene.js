@@ -421,11 +421,7 @@ let FAScene = class {
     checkForElements(x1, y1, x2, y2) {
         const [xMin, yMin, xMax, yMax] = [Math.min(x1,x2), Math.min(y1,y2), Math.max(x1,x2), Math.max(y1,y2)];
 
-        const elements = FA.states.concat(FA.transitions);
-
-        elements.forEach(e => {
-            if(xMin < e.x && e.x < xMax && yMin < e.y && e.y < yMax)
-                this.selected.push(e);
-        });
+        const elements = FA.states.concat(FA.transitions).filter(e => xMin < e.x && e.x < xMax && yMin < e.y && e.y < yMax);
+        this.selected = this.selected.concat(elements);
     }
 }
