@@ -344,43 +344,43 @@ let FAScene = class {
         this.ctx.stroke();
     }
 
+    // Reescrever a partir daqui
     mouseUpHandle = (e) => {
-        this.mousePressed = false;
-
-        if (this.selectionBoxX != null) {
-            this.checkForElements(this.selectionBoxX, this.selectionBoxY, this.lastX, this.lastY);
+        if(this.selectionBoxX != null) {
+            this.checkForElements(this.selectionBoxX,this.selectionBoxY,this.lastX,this.lastY);
             this.selectionBoxX = null;
             this.selectionBoxY = null;
-            return;
         }
-
-        if (!this.ctrlPressed)
+        else if(!this.ctrlPressed)
             this.selected.length = 0;
+
+        this.mousePressed = false;
     }
 
     mouseMoveHandle = (e) => {
-        this.deltaX = e.offsetX - this.lastX;
-        this.deltaY = e.offsetY - this.lastY;
+        this.deltaX = e.offsetX-this.lastX;
+        this.deltaY = e.offsetY-this.lastY;
         this.lastX = e.offsetX;
         this.lastY = e.offsetY;
+        
+        if(!this.mousePressed) return;
 
-        if (!this.mousePressed) return;
-
-        this.selected.forEach(e => e.move(e.x + (this.deltaX), e.y + (this.deltaY)));
+        this.selected.forEach(e => e.move(e.x + (this.deltaX),e.y + (this.deltaY)));
+        
         this.redraw();
     }
 
     mouseDownHandle = (e) => {
         this.closeMenu();
 
-        if (e.button != 0) return;
+        if(e.button != 0) return;
 
         this.mousePressed = true;
 
-        const target = this.checkForElement(e.offsetX, e.offsetY);
+        const target = this.checkForElement(e.offsetX,e.offsetY);
 
-        if (target != null && !this.selected.includes(target)) {
-            this.selected.push(target);
+        if(target != null && !this.selected.includes(target)) {
+            this.selected.push(target)
             return;
         }
 
@@ -404,26 +404,28 @@ let FAScene = class {
     }
 
     checkForElement = (x, y) => {
-        FA.states.forEach(s => {
+        for (let s of FA.states) {
             if (x < (s.x + s.radius) && x > (s.x - s.radius) && y < (s.y + s.radius) && y > (s.y - s.radius))
                 return s;
-        });
-        
-        FA.transitions.forEach(t => {
+        }
+
+        for (let t of FA.transitions) {
             if (x < (t.x + (t.symbols.length * 10) / 2) && x > (t.x - (t.symbols.length * 10) / 2) && y < (t.y + 6) && y > (t.y - 6))
                 return t;
-        });
+        }
 
         return null;
     }
 
     // Marca elementos selecionados
     checkForElements(x1, y1, x2, y2) {
-        const [xMin, yMin, xMax, yMax] = [Math.min(x1, x2), Math.min(y1, y2), Math.max(x1, x2), Math.max(y1, y2)];
+        const [xMin, yMin, xMax, yMax] = [Math.min(x1,x2), Math.min(y1,y2), Math.max(x1,x2), Math.max(y1,y2)];
+
         const elements = FA.states.concat(FA.transitions);
 
         elements.forEach(e => {
-            if (xMin < e.x && e.x < xMax && yMin < e.y && e.y < yMax) this.selected.push(e);
+            if(xMin < e.x && e.x < xMax && yMin < e.y && e.y < yMax)
+                this.selected.push(e);
         });
     }
 }

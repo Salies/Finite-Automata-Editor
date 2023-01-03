@@ -12,52 +12,38 @@ let FA = class {
     }
 
     static addTransition(from, to, symbols, x = null, y = null) {
-        let transition = new Transition(from, to, symbols, x, y);
+        const transition = new Transition(from, to, symbols, x, y);
         FA.transitions.push(transition);
     }
 
     static removeState(state) {
-        let oldTransitionList = []
-        for(let t of FA.transitions) {
-            if(t.fromState == state || t.toState == state) {
-                oldTransitionList.push(t);
-            }
-        }
-        for(let t of oldTransitionList) {
-            FA.removeTransition(t);
-        }
-        let i = FA.states.indexOf(state);
-        FA.states.splice(i,1);
-        if(state.start) {
-            FA.startState = null;
-        }
+        const stateTransitions = FA.transitions.filter(t => t.fromState == state || t.toState == state);
+        stateTransitions.forEach(t => FA.removeTransition(t));
+
+        FA.states = FA.states.filter(s => s != state);
+
+        if(state.start) FA.startState = null;
     }
 
     static removeTransition(transition) {
-        let i = FA.transitions.indexOf(transition);
-        FA.transitions.splice(i,1);
+        FA.transitions = FA.transitions.filter(t => t != transition);
     }
 
     static setStart(state) {
-        if(FA.startState != null) {
-            FA.startState.start = false;
-        }
+        // Se já existe um estado inicial...
+        if(FA.startState != null) FA.startState.start = false;
         FA.startState = state;
         state.start = true;
     }
 
     static reset(input = null) {
-        if(input != null) {
+        if(input != null)
             FA.input = input;
-        }
         FA.inputIndex = 0;
 
-        for(let transition of FA.transitions) {
-            transition.current = false;
-        }
-        for(let state of FA.states) {
-            state.current = false;
-        }
+        const elements = FA.states.concat(FA.transitions);
+        elements.forEach(e => e.current = false);
+        
         FA.startState.current = true;
         FA.processEpsilons();
     }
